@@ -1,6 +1,6 @@
 from pyrogram import Client
 from datetime import datetime
-import json
+import pandas as pd
 import time
 
 # Replace these values with your own
@@ -15,25 +15,27 @@ started = datetime.today()
 print("app started successfully")
 app.start()
 i = 0
-json_data = {}
+data_list = []
 
 for message in app.get_chat_history('Spotted_DMI', limit=100, offset_date=datetime.today()):
     i += 1
     print("\n##### Spot numero: " + str(i) + " ID : " + str(message.id))
-    print(message.text
-          )
-    data = {
-        "Spot": message.text,
-        "Comments": []
-    }
+    print(message.text)
+    
+    comments = []
     print("\n#### Commenti del post con ID :" + str(message.id))
     for reply in app.get_discussion_replies('Spotted_DMI', message.id):
         print(reply.text)
-        data["Comments"].append(reply.text)
+        comments.append(reply.text)
         time.sleep(2)
-    json_data[message.id] = data
-
-with open("data.json", "w") as json_file:
-    json.dump(json_data, json_file, indent=4, ensure_ascii=False)
+    
+    data_list.append({
+        "Message ID": message.id,
+        "Spot": message.text,
+        "Comments": comments
+    })
 
 app.stop()
+
+df = pd.DataFrame(data_list)
+df.to_csv("data.csv", index=False)
