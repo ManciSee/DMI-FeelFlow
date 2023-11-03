@@ -1,6 +1,7 @@
 from pyrogram import Client
-import asyncio
 from datetime import datetime
+import asyncio
+import json
 
 # Replace these values with your own
 api_id = 21014514
@@ -14,10 +15,29 @@ started = datetime.today()
 
 print("app started succesfully ")
 app.start()
-for message in app.get_chat_history('Spotted_DMI',limit=2,offset_date=datetime.today()):
+i=0
+json_data={}
+
+for message in app.get_chat_history('Spotted_DMI',limit=5,offset_date=datetime.today()):
+    i+=1
+    print("\n##### Spot numero: " + str(i) + " ID : " + str(message.id))
     print(message.text)
+    data={}
+    data={
+        "Spot: " : message.text
+    }
+    print("\n#### Commenti del post con ID :" + str(message.id))
+    for reply in app.get_discussion_replies('Spotted_DMI',message.id):
+        print(reply.text)
+        json_data[message.id] = data    
+        data = {
+            "Spot" : message.text,
+            "Comments:" :{
+                "Commento": reply.text
+            }
+        }
+        with open("data.json", "w") as json_file:
+            json.dump(json_data, json_file, indent=4)
+
     
-for message in app.get_discussion_replies('Spotted_DMI', 16116):
-    print("--------- COMMENTI ---------------")
-    print(message.text)
 app.stop() 
