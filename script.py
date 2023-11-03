@@ -1,35 +1,23 @@
-from telethon.sync import TelegramClient
-import datetime
-import pandas as pd
-import json
+from pyrogram import Client
+import asyncio
+from datetime import datetime
 
-# 1) .env is not configured
-# 2) the script make a json file
-# 3) in chats goes the telegram ID of the username.
+# Replace these values with your own
+api_id = 21014514
+api_hash = '4493b4a38e7b95a3f05fcf1f5d2cb03d'
+channel_id = 'Spotted_DMI'
 
-api_id = "" # INSERT ID 
-api_hash ="" # INSERT HASH 
-chats = ['mancisee']
 
-# Create a TelegramClient instance
-client = TelegramClient('test', api_id, api_hash)
+# Create a Pyrogram client
+app = Client('session_name', api_id=api_id, api_hash=api_hash)
+started = datetime.today()
 
-# Ensure that the client connection is properly closed
-try:
-    client.start()
-    data_list = []
-    for chat in chats:
-        for message in client.iter_messages(chat, offset_date=datetime.date.today(), reverse=True):
-            print(message)
-            data = {"group": chat, "sender": message.sender_id, "text": message.text, "date": str(message.date)}
-            data_list.append(data)
-
-finally:
-    client.disconnect()
-
-# Save the data_list to a JSON file
-output_file_path = "messages_data_{}.json".format(datetime.date.today())
-with open(output_file_path, 'w') as f:
-    json.dump(data_list, f, indent=4)
-
-print(f"Messages data saved to {output_file_path}")
+print("app started succesfully ")
+app.start()
+for message in app.get_chat_history('Spotted_DMI',limit=2,offset_date=datetime.today()):
+    print(message.text)
+    
+for message in app.get_discussion_replies('Spotted_DMI', 16116):
+    print("--------- COMMENTI ---------------")
+    print(message.text)
+app.stop() 
