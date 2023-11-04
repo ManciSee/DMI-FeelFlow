@@ -2,22 +2,24 @@ from pyrogram import Client
 from datetime import datetime
 import pandas as pd
 import time
+import os
+import dotenv
 
-# Replace these values with your own
-api_id = 21014514
-api_hash = '4493b4a38e7b95a3f05fcf1f5d2cb03d'
+dotenv.load_dotenv()
+
+api_id = os.getenv('API_ID')
+api_hash = os.getenv('API_HASH')
 channel_id = 'Spotted_DMI'
 
 # Create a Pyrogram client
 app = Client('session_name', api_id=api_id, api_hash=api_hash)
 started = datetime.today()
 
-print("app started successfully")
+print(" ######## app started successfully ########### ")
 app.start()
 i = 0
 data_list = []
-chat_history = app.get_chat_history('Spotted_DMI', limit=100,offset_id=16108)
-image = app.get_chat_photos('Spotted_DMI')
+chat_history = app.get_chat_history(channel_id, limit=100,offset_id=16108)
 for message in chat_history:
     i+=1
     
@@ -44,7 +46,7 @@ for message in chat_history:
         print(message.text)
         comments = []
         print("\n## Commenti del post con ID :" + str(message.id))
-        for reply in app.get_discussion_replies('Spotted_DMI', message.id):
+        for reply in app.get_discussion_replies(channel_id, message.id):
              
             # Q) Not sure if is saving the corret file, not visible from my laptop.
             
