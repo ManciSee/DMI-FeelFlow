@@ -57,7 +57,7 @@ To run this project, you will need to add the following environment variables to
   <img src="https://avatars.githubusercontent.com/u/83662708?v=4" style="width:60px; height:60px; border-radius: 50%; margin-right: 40px;">
 </a>
 
-<a href="https://github.com/pyMelo">
+<a href="https://github.com/enrysorb">
   <img src="https://avatars.githubusercontent.com/u/71724073?v=4" style=width:60px; height:60px; border-radius: 50%;">
 </a>
 
